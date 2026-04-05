@@ -1,0 +1,52 @@
+{
+  "wildCardIndicator": true,
+  "standingsDateTimeUtc": "2026-01-01T00:00:00Z",
+  "standings": [
+    {
+      "leagueSequence": 1,
+      "conferenceSequence": 1,
+      "divisionSequence": 1,
+      "conferenceAbbrev": "W",
+      "conferenceName": "Western",
+      "divisionAbbrev": "C",
+      "divisionName": "Central",
+      "gamesPlayed": 82,
+      "wins": 50,
+      "losses": 20,
+      "otLosses": 12,
+      "points": 112,
+      "regulationWins": 40,
+      "regulationPlusOtWins": 45,
+      "goalDifferential": 40,
+      "pointPctg": 0.6829,
+      "teamAbbrev": { "default": "COL" },
+      "teamName": { "default": "Colorado Avalanche" },
+      "placeName": { "default": "Colorado" },
+      "teamLogo": "https://assets.nhle.com/logos/nhl/svg/COL_light.svg",
+      "wildCardSequence": 0
+    },
+    {
+      "leagueSequence": 2,
+      "conferenceSequence": 1,
+      "divisionSequence": 1,
+      "conferenceAbbrev": "E",
+      "conferenceName": "Eastern",
+      "divisionAbbrev": "M",
+      "divisionName": "Metropolitan",
+      "gamesPlayed": 82,
+      "wins": 48,
+      "losses": 22,
+      "otLosses": 12,
+      "points": 108,
+      "regulationWins": 36,
+      "regulationPlusOtWins": 42,
+      "goalDifferential": 35,
+      "pointPctg": 0.6585,
+      "teamAbbrev": { "default": "CAR" },
+      "teamName": { "default": "Carolina Hurricanes" },
+      "placeName": { "default": "Carolina" },
+      "teamLogo": "https://assets.nhle.com/logos/nhl/svg/CAR_light.svg",
+      "wildCardSequence": 0
+    }
+  ]
+}
