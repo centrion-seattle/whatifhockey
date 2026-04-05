@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  output: 'export',
+  basePath: '/whatifhockey',
+  assetPrefix: '/whatifhockey/',
 };
 
 export default nextConfig;
