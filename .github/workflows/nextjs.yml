@@ -11,25 +11,25 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout 🛎️
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node 🏗️
-        uses: [actions/setup-node](https://github.com/actions/setup-node)@v6
+      - name: Set up Node
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: 'npm' # Speeds up future runs
 
-      - name: Install and Build 🔧
+      - name: Install and Build
         run: |
           npm ci        # Cleaner install than 'npm install' for CI
           npm run build # Generates your static files (e.g., in /dist or /build)
 
-      - name: Upload Artifact 📤
+      - name: Upload Artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist # Change this to your build output folder (e.g., 'build' or 'public')
 
-      - name: Deploy to GitHub Pages 🚀
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
