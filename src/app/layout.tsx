@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import { SiteNav } from "@/components/site-nav";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,6 +38,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen font-sans antialiased`}
       >
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+          <SiteNav />
           {children}
         </div>
       </body>

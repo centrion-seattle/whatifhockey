@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { formatUtc } from "@/lib/format";
 import {
   DIVISION_ORDER_EAST,
   DIVISION_ORDER_WEST,
@@ -28,18 +29,6 @@ import {
   type RankingStrategyId,
 } from "@/lib/standings/strategies";
 import type { PlayoffSpot, TeamStanding } from "@/lib/standings/types";
-
-function formatUtc(iso: string): string {
-  try {
-    const d = new Date(iso);
-    return new Intl.DateTimeFormat(undefined, {
-      dateStyle: "medium",
-      timeStyle: "short",
-    }).format(d);
-  } catch {
-    return iso;
-  }
-}
 
 export type StandingsViewMode = "league" | "conference" | "playoffs";
 
