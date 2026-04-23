@@ -25,24 +25,25 @@ export function LastFiveCard({ games }: { games: PlayerLast5[] }) {
                 )}
               </div>
               {g.kind === "skater" ? (
-                <div className="mt-1 flex items-baseline gap-2 tabular-nums">
-                  <span className="text-lg font-semibold">
-                    {g.goals}G
-                  </span>
-                  <span className="text-lg font-semibold">{g.assists}A</span>
-                  <span className="text-muted-foreground">
-                    {g.points}P · {g.shots} SOG · {g.toi}
-                  </span>
+                <div className="mt-1 tabular-nums">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-lg font-semibold">{g.goals}G</span>
+                    <span className="text-lg font-semibold">{g.assists}A</span>
+                    <span className="text-lg font-semibold">{g.points}P</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {g.shots} SOG · {g.toi}
+                  </div>
                 </div>
               ) : (
-                <div className="mt-1 flex items-baseline gap-2 tabular-nums">
-                  <span className="text-lg font-semibold">
+                <div className="mt-1 tabular-nums">
+                  <div className="text-lg font-semibold">
                     {g.decision ?? "—"}
-                  </span>
-                  <span className="text-muted-foreground">
+                  </div>
+                  <div className="text-xs text-muted-foreground">
                     {formatSavePct(g.savePct)} · {g.shotsAgainst - g.goalsAgainst}/
                     {g.shotsAgainst} · {g.toi}
-                  </span>
+                  </div>
                 </div>
               )}
             </li>
