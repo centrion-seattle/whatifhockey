@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import fallbackClubStats from "@/lib/nhl/fallback-club-stats.json";
 import { formatUtc } from "@/lib/format";
-import type { PlayerLanding, SkaterSplits } from "@/lib/player/types";
+import type { PlayerGameLog, PlayerLanding, SkaterSplits } from "@/lib/player/types";
 
 import { AwardsCard } from "./awards-card";
 import { CareerHistoryTable } from "./career-history-table";
@@ -56,6 +56,8 @@ export function PlayerPageView({
   seasonId,
   splits,
   leagueSplits,
+  regularLog,
+  playoffLog,
   updatedAt,
   source,
   fetchError,
@@ -64,6 +66,8 @@ export function PlayerPageView({
   seasonId: number;
   splits: SkaterSplits | undefined;
   leagueSplits: Record<string, SkaterSplits>;
+  regularLog: PlayerGameLog | null;
+  playoffLog: PlayerGameLog | null;
   updatedAt: string;
   source: "live" | "fallback";
   fetchError?: string;
@@ -116,6 +120,7 @@ export function PlayerPageView({
           playerId={bio.playerId}
           initialSeasonId={seasonId}
           playerStatsSeasons={[]}
+          initialLog={regularLog}
         />
       ) : (
         <>
@@ -135,6 +140,8 @@ export function PlayerPageView({
         isGoalie={isGoalie}
         initialSeasonId={seasonId}
         playerStatsSeasons={[]}
+        regularLog={regularLog}
+        playoffLog={playoffLog}
       />
 
       <footer className="border-t border-border pt-6 text-center text-xs text-muted-foreground">

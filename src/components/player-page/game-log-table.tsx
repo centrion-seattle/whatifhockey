@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -26,7 +25,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tooltip } from "@/components/ui/tooltip";
-import { fetchPlayerGameLog } from "@/lib/nhl/fetch-player-game-log";
 import {
   GOALIE_GAME_LOG_COLUMNS,
   SKATER_GAME_LOG_COLUMNS,
@@ -48,29 +46,29 @@ type SortDir = "asc" | "desc";
 type SortState = { id: string; dir: SortDir };
 
 export function GameLogSection({
-  playerId,
   isGoalie,
   initialSeasonId,
   playerStatsSeasons,
+  regularLog,
+  playoffLog,
 }: {
   playerId: number;
   isGoalie: boolean;
   initialSeasonId: number;
   playerStatsSeasons: Array<{ season: number; gameTypes: number[] }>;
+  regularLog: PlayerGameLog | null;
+  playoffLog: PlayerGameLog | null;
 }) {
   const fallbackSeasons = useMemo(
     () =>
       playerStatsSeasons.length > 0
         ? playerStatsSeasons
-        : [{ season: initialSeasonId, gameTypes: [2] }],
-    [playerStatsSeasons, initialSeasonId],
+        : [{ season: initialSeasonId, gameTypes: [2, ...(playoffLog ? [3] : [])] }],
+    [playerStatsSeasons, initialSeasonId, playoffLog],
   );
 
   const [seasonId, setSeasonId] = useState(fallbackSeasons[0].season);
   const [gameTypeId, setGameTypeId] = useState<2 | 3>(2);
-  const [log, setLog] = useState<PlayerGameLog | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<SortState>({ id: "date", dir: "desc" });
 
   const availableTypes = useMemo(() => {
@@ -78,33 +76,7 @@ export function GameLogSection({
     return current?.gameTypes ?? [2];
   }, [fallbackSeasons, seasonId]);
 
-  useEffect(() => {
-    if (!availableTypes.includes(gameTypeId)) {
-      setGameTypeId(availableTypes[0] as 2 | 3);
-    }
-  }, [availableTypes, gameTypeId]);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-    fetchPlayerGameLog(playerId, seasonId, gameTypeId, isGoalie).then(
-      (res) => {
-        if (cancelled) return;
-        if (res.ok) {
-          setLog(res.log);
-          setError(null);
-        } else {
-          setLog(null);
-          setError(res.error);
-        }
-        setLoading(false);
-      },
-    );
-    return () => {
-      cancelled = true;
-    };
-  }, [playerId, seasonId, gameTypeId, isGoalie]);
+  const log = gameTypeId === 2 ? regularLog : playoffLog;
 
   const rows = useMemo(() => log?.rows ?? [], [log]);
 
@@ -204,16 +176,7 @@ export function GameLogSection({
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {loading && (
-          <p className="text-sm text-muted-foreground">Loading game log…</p>
-        )}
-        {error && !loading && (
-          <div className="flex items-center gap-2">
-            <Badge variant="warning">Live fetch failed</Badge>
-            <p className="text-xs text-muted-foreground">{error}</p>
-          </div>
-        )}
-        {!loading && rows.length === 0 && (
+        {rows.length === 0 && (
           <p className="py-4 text-sm text-muted-foreground">
             No games in this view.
           </p>

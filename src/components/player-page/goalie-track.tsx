@@ -1,8 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -11,49 +8,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tooltip } from "@/components/ui/tooltip";
-import { fetchPlayerGameLog } from "@/lib/nhl/fetch-player-game-log";
 import { formatSavePct } from "@/lib/player/format";
 import type { GoalieGameLogRow, PlayerGameLog } from "@/lib/player/types";
 import { cn } from "@/lib/utils";
 
 export function GoalieTrack({
-  playerId,
-  initialSeasonId,
-  playerStatsSeasons,
+  initialLog,
 }: {
   playerId: number;
   initialSeasonId: number;
   playerStatsSeasons: Array<{ season: number; gameTypes: number[] }>;
+  initialLog?: PlayerGameLog | null;
 }) {
-  const seasonsForPicker =
-    playerStatsSeasons.length > 0
-      ? playerStatsSeasons
-      : [{ season: initialSeasonId, gameTypes: [2] }];
-  const seasonId = seasonsForPicker[0].season;
-
-  const [log, setLog] = useState<PlayerGameLog | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    fetchPlayerGameLog(playerId, seasonId, 2, true).then((res) => {
-      if (cancelled) return;
-      if (res.ok) {
-        setLog(res.log);
-        setError(null);
-      } else {
-        setError(res.error);
-      }
-      setLoading(false);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [playerId, seasonId]);
-
-  const starts = ((log?.rows ?? []) as GoalieGameLogRow[]).filter(
+  const starts = ((initialLog?.rows ?? []) as GoalieGameLogRow[]).filter(
     (r) => r.gamesStarted > 0,
   );
   const shutouts = starts.filter((r) => r.shutouts > 0);
@@ -69,14 +36,10 @@ export function GoalieTrack({
               log.
             </CardDescription>
           </div>
-          {error && <Badge variant="warning">Live fetch failed</Badge>}
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {loading && (
-          <p className="text-sm text-muted-foreground">Loading starts…</p>
-        )}
-        {!loading && starts.length === 0 && (
+        {starts.length === 0 && (
           <p className="py-3 text-sm text-muted-foreground">
             No goalie starts recorded for this season.
           </p>
