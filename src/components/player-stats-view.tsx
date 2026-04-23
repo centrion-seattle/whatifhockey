@@ -351,9 +351,12 @@ function PlayerTable<T extends WithGp>({
         {rows.map((row) => (
           <TableRow key={row.playerId}>
             <TableCell className="sticky left-0 z-10 bg-background">
-              <div className="flex items-center gap-2 whitespace-nowrap">
+              <Link
+                href={`/player/${row.playerId}`}
+                className="flex items-center gap-2 whitespace-nowrap hover:underline"
+              >
                 {renderIdentity(row)}
-              </div>
+              </Link>
             </TableCell>
             {columns.map((col) => (
               <TableCell
