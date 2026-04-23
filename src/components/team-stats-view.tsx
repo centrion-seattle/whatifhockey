@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -198,7 +199,11 @@ export function TeamStatsView(props: {
               {sorted.map((row) => (
                 <TableRow key={row.teamId}>
                   <TableCell className="sticky left-0 z-10 bg-background">
-                    <div className="flex items-center gap-2 whitespace-nowrap">
+                    <Link
+                      href={`/player-stats/${row.abbrev}`}
+                      className="flex items-center gap-2 whitespace-nowrap hover:underline"
+                      title={`Player stats for ${row.name}`}
+                    >
                       <Image
                         src={row.logoUrl}
                         alt=""
@@ -211,7 +216,7 @@ export function TeamStatsView(props: {
                       <span className="text-muted-foreground">
                         {row.abbrev}
                       </span>
-                    </div>
+                    </Link>
                   </TableCell>
                   {STAT_COLUMNS.map((col) => (
                     <TableCell

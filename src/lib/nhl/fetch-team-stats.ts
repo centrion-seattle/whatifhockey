@@ -1,8 +1,8 @@
 import "server-only";
 
 import fallbackData from "./fallback-team-stats.json";
+import { resolveCurrentSeasonId } from "./fetch-season";
 import type {
-  NhlStandingsSeasonResponse,
   NhlTeamRealtimeRow,
   NhlTeamStatsApiResponse,
   NhlTeamSummaryRow,
@@ -10,7 +10,6 @@ import type {
 import type { TeamStanding } from "@/lib/standings/types";
 import type { TeamStats } from "@/lib/team-stats/types";
 
-const SEASONS_URL = "https://api-web.nhle.com/v1/standings-season";
 const REVALIDATE_SECONDS = 120;
 
 function summaryUrl(seasonId: number): string {
@@ -42,12 +41,6 @@ async function fetchJson<T>(url: string): Promise<T> {
   });
   if (!res.ok) throw new Error(`${url} → HTTP ${res.status}`);
   return res.json() as Promise<T>;
-}
-
-async function resolveCurrentSeasonId(): Promise<number> {
-  const seasons = await fetchJson<NhlStandingsSeasonResponse>(SEASONS_URL);
-  if (!seasons.seasons?.length) throw new Error("No seasons returned");
-  return seasons.seasons[seasons.seasons.length - 1].id;
 }
 
 export function mergeRows(
@@ -119,7 +112,8 @@ export async function getTeamStats(
   standings: TeamStanding[],
 ): Promise<FetchTeamStatsResult> {
   try {
-    const seasonId = await resolveCurrentSeasonId();
+    const fb = fallbackData as FallbackShape;
+    const seasonId = await resolveCurrentSeasonId(fb.seasonId);
     const [summary, realtime] = await Promise.all([
       fetchJson<NhlTeamStatsApiResponse<NhlTeamSummaryRow>>(summaryUrl(seasonId)),
       fetchJson<NhlTeamStatsApiResponse<NhlTeamRealtimeRow>>(realtimeUrl(seasonId)),
