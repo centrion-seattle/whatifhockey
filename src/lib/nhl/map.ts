@@ -23,6 +23,8 @@ export function mapApiRowToStanding(row: NhlStandingsApiRow): TeamStanding {
     regulationPlusOtWins: row.regulationPlusOtWins,
     goalDifferential: row.goalDifferential,
     pointPctg: row.pointPctg,
+    shootoutWins: row.wins - row.regulationPlusOtWins,
+    divConfBonusPoints: 0,
     apiLeagueRank: row.leagueSequence,
     apiConferenceRank: row.conferenceSequence,
     apiDivisionRank: row.divisionSequence,

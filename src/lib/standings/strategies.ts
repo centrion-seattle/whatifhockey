@@ -5,7 +5,10 @@ export type RankingStrategyId =
   | "nhl_tiebreak"
   | "points_pct"
   | "wins_only"
-  | "no_otl_point";
+  | "no_otl_point"
+  | "three_two_one"
+  | "no_shootout"
+  | "div_conf_bonus";
 
 export type RankingStrategy = {
   id: RankingStrategyId;
@@ -70,6 +73,35 @@ function compareApiOrder(a: TeamStanding, b: TeamStanding): number {
   return cmpNum(a.apiLeagueRank, b.apiLeagueRank);
 }
 
+/** 3-2-1: 3 pts reg win, 2 pts OT/SO win, 1 pt OT/SO loss */
+function points321(t: TeamStanding): number {
+  const otSoWins = t.wins - t.regulationWins;
+  return t.regulationWins * 3 + otSoWins * 2 + t.otLosses;
+}
+
+function compare321(a: TeamStanding, b: TeamStanding): number {
+  const p = cmpNum(points321(b), points321(a));
+  if (p !== 0) return p;
+  return compareNhlTiebreak(a, b);
+}
+
+/** No Shootout: SO games are ties (1 pt each). SO wins lose a point vs current. */
+function pointsNoSo(t: TeamStanding): number {
+  return t.points - t.shootoutWins;
+}
+
+function compareNoShootout(a: TeamStanding, b: TeamStanding): number {
+  const p = cmpNum(pointsNoSo(b), pointsNoSo(a));
+  if (p !== 0) return p;
+  return compareNhlTiebreak(a, b);
+}
+
+function compareDivConfBonus(a: TeamStanding, b: TeamStanding): number {
+  const p = cmpNum(b.divConfBonusPoints, a.divConfBonusPoints);
+  if (p !== 0) return p;
+  return compareNhlTiebreak(a, b);
+}
+
 export const RANKING_STRATEGIES: RankingStrategy[] = [
   {
     id: "api",
@@ -112,6 +144,33 @@ export const RANKING_STRATEGIES: RankingStrategy[] = [
     compare: compareNoOtlPoint,
     pointsLabel: "PTS*",
     displayPoints: pointsNoOtlBonus,
+  },
+  {
+    id: "three_two_one",
+    label: "3-2-1 system",
+    description:
+      "3 points for a regulation win, 2 for an OT/SO win, 1 for an OT/SO loss. Rewards winning in regulation.",
+    compare: compare321,
+    pointsLabel: "PTS*",
+    displayPoints: points321,
+  },
+  {
+    id: "no_shootout",
+    label: "No shootout (SO = tie)",
+    description:
+      "Shootout games are treated as ties — both teams get 1 point. Only regulation and OT results decide winners.",
+    compare: compareNoShootout,
+    pointsLabel: "PTS*",
+    displayPoints: pointsNoSo,
+  },
+  {
+    id: "div_conf_bonus",
+    label: "Division & conference bonus",
+    description:
+      "3 pts for a division win, 2 for a conference win, 1 for an inter-conference win. OT/SO losses earn 0.5.",
+    compare: compareDivConfBonus,
+    pointsLabel: "PTS*",
+    displayPoints: (t) => t.divConfBonusPoints,
   },
 ];
 

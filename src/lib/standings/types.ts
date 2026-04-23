@@ -18,6 +18,9 @@ export type TeamStanding = {
   regulationPlusOtWins: number;
   goalDifferential: number;
   pointPctg: number;
+  shootoutWins: number;
+  /** Pre-computed weighted points for the div/conf bonus strategy. */
+  divConfBonusPoints: number;
   /** Order from NHL API (1 = first) */
   apiLeagueRank: number;
   /** Official order within conference per API (1 = first) */
