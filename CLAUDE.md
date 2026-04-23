@@ -1,6 +1,11 @@
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# Mandatory Rules
+These rules are not optional
+- Minimize the number of output tokens. Use as few words and the least code possible
+- Only ask me questions when the answer is important. Don't ask me trivial questions that are easily fixed later on
+- Only think hard on a problem when the answer makes a significant difference
 
 ## Commands
 
