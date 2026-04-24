@@ -1,7 +1,9 @@
 name: Build and Deploy to Pages
 on:
   push:
-    branches: [ "main" ] # Runs whenever you push to main branch
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 10 * * *' # 3am PDT / 2am PST daily
 permissions:
   contents: read
   pages: write
