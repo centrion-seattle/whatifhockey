@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   Card,
   CardContent,
@@ -69,15 +71,17 @@ export function GoalieTrack({
                     }/${r.shotsAgainst}) · ${r.decision ?? "—"}`}
                     className="inline-flex"
                   >
-                    <span
-                      className={cn(
-                        "inline-block h-6 w-6 rounded",
-                        tone,
-                        r.decision === "W" &&
-                          "ring-1 ring-emerald-300/80",
-                      )}
-                      aria-label={`${r.gameDate} ${r.opponentAbbrev} SV% ${formatSavePct(sv)}`}
-                    />
+                    <Link href={`/game/${r.gameId}`}>
+                      <span
+                        className={cn(
+                          "inline-block h-6 w-6 rounded",
+                          tone,
+                          r.decision === "W" &&
+                            "ring-1 ring-emerald-300/80",
+                        )}
+                        aria-label={`${r.gameDate} ${r.opponentAbbrev} SV% ${formatSavePct(sv)}`}
+                      />
+                    </Link>
                   </Tooltip>
                 );
               })}

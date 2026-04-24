@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -342,17 +343,19 @@ function CalendarCellGame({ game }: { game: Game }) {
   if (result) {
     return (
       <li className="truncate">
-        <span className="font-medium">{result.winnerAbbrev}</span>
-        <span className="tabular-nums">
-          {" "}
-          {result.winnerScore}–{result.loserScore}{" "}
-        </span>
-        <span className="text-muted-foreground">{result.loserAbbrev}</span>
-        {result.tag && (
-          <span className="ml-1 text-[10px] text-muted-foreground">
-            {result.tag}
+        <Link href={`/game/${game.id}`} className="hover:underline">
+          <span className="font-medium">{result.winnerAbbrev}</span>
+          <span className="tabular-nums">
+            {" "}
+            {result.winnerScore}–{result.loserScore}{" "}
           </span>
-        )}
+          <span className="text-muted-foreground">{result.loserAbbrev}</span>
+          {result.tag && (
+            <span className="ml-1 text-[10px] text-muted-foreground">
+              {result.tag}
+            </span>
+          )}
+        </Link>
       </li>
     );
   }
@@ -366,7 +369,13 @@ function CalendarCellGame({ game }: { game: Game }) {
 function MobileDayGame({ game }: { game: Game }) {
   const line = formatResultLine(game);
   if (line) {
-    return <li className="tabular-nums">{line}</li>;
+    return (
+      <li className="tabular-nums">
+        <Link href={`/game/${game.id}`} className="hover:underline">
+          {line}
+        </Link>
+      </li>
+    );
   }
   return (
     <li>
@@ -556,7 +565,15 @@ function TeamViewRow({ game, teamAbbrev }: { game: Game; teamAbbrev: string }) {
           </Badge>
         )}
       </TableCell>
-      <TableCell className="text-right">{resultCell}</TableCell>
+      <TableCell className="text-right">
+        {result ? (
+          <Link href={`/game/${game.id}`} className="hover:underline">
+            {resultCell}
+          </Link>
+        ) : (
+          resultCell
+        )}
+      </TableCell>
     </TableRow>
   );
 }
@@ -682,14 +699,16 @@ function MatchupRow({ game }: { game: Game }) {
       </TableCell>
       <TableCell className="text-right">
         {result ? (
-          <span className="tabular-nums font-medium">
-            {game.home.score}–{game.away.score}
-            {result.tag && (
-              <Badge variant="secondary" className="ml-2 text-[10px]">
-                {result.tag}
-              </Badge>
-            )}
-          </span>
+          <Link href={`/game/${game.id}`} className="hover:underline">
+            <span className="tabular-nums font-medium">
+              {game.home.score}–{game.away.score}
+              {result.tag && (
+                <Badge variant="secondary" className="ml-2 text-[10px]">
+                  {result.tag}
+                </Badge>
+              )}
+            </span>
+          </Link>
         ) : (
           <span className="text-muted-foreground">
             {formatTimeShort(game.startTimeUtc)}

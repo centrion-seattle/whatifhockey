@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatSavePct } from "@/lib/player/format";
 import type { PlayerLast5 } from "@/lib/player/types";
@@ -15,8 +17,9 @@ export function LastFiveCard({ games }: { games: PlayerLast5[] }) {
           {games.map((g) => (
             <li
               key={g.gameId}
-              className="rounded-md border border-border bg-muted/20 p-3 text-sm"
+              className="rounded-md border border-border bg-muted/20 text-sm"
             >
+              <Link href={`/game/${g.gameId}`} className="block p-3 transition-colors hover:bg-muted/40">
               <div className="text-xs text-muted-foreground">
                 {g.gameDate} · {g.homeRoadFlag === "H" ? "vs" : "@"}{" "}
                 {g.opponentAbbrev}
@@ -46,6 +49,7 @@ export function LastFiveCard({ games }: { games: PlayerLast5[] }) {
                   </div>
                 </div>
               )}
+              </Link>
             </li>
           ))}
         </ul>

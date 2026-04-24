@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
 import {
@@ -259,7 +260,9 @@ export function GameLogSection({
                 {sortedRows.map((row) => (
                   <TableRow key={row.gameId}>
                     <TableCell className="whitespace-nowrap tabular-nums">
-                      {row.gameDate}
+                      <Link href={`/game/${row.gameId}`} className="hover:underline">
+                        {row.gameDate}
+                      </Link>
                     </TableCell>
                     <TableCell className="whitespace-nowrap">
                       {row.homeRoadFlag === "H" ? "vs" : "@"}{" "}
